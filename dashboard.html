@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | CBE Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <h1>CBE Examination Portal</h1>
+        <p>Welcome to your student dashboard.</p>
+    </header>
+
+    <main class="welcome">
+        <h2 id="student-name">Loading your profile...</h2>
+        <p>From here, you will access your subjects and examinations.</p>
+
+<section class="dashboard-actions">
+    <h3>Your Examination Centre</h3>
+
+    <p>Select a subject and begin your examination.</p>
+
+    <a href="exam.html" class="dashboard-link">
+        Choose a Subject
+    </a>
+</section>
+
+<section class="dashboard-results">
+    <h3>Your Examination History</h3>
+
+    <p id="results-message">
+        Your previous examination results will appear here.
+    </p>
+
+    <div id="results-history"></div>
+</section>
+
+        <button id="logout-button" type="button">Log Out</button>
+        <p id="dashboard-message"></p>
+    </main>
+
+    <script type="module" src="dashboard.js"></script>
+</body>
+</html>

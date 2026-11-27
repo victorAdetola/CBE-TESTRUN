@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Examination | CBE Portal</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Examination page background */
+        body.exam-page {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f3f6fc;
+            color: #17233f;
+        }
+
+        .exam-header {
+            background: linear-gradient(135deg, #10234f, #2456a6);
+            color: white;
+            padding: 35px 20px 45px;
+            text-align: center;
+        }
+
+        .exam-header h1 {
+            margin: 0 0 12px;
+            font-size: clamp(25px, 4vw, 36px);
+        }
+
+        .exam-header p {
+            margin: 0;
+            color: #dce7ff;
+            line-height: 1.6;
+        }
+
+        .exam-container {
+            width: min(900px, 92%);
+            margin: -18px auto 40px;
+        }
+
+        .subject-panel {
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(24, 48, 91, 0.09);
+        }
+
+        .subject-panel h2 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        .panel-description {
+            margin: 0 0 25px;
+            color: #69758b;
+            line-height: 1.6;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .subject-card {
+            --accent: #3159c9;
+            --tint: #edf1ff;
+
+            position: relative;
+            min-height: 185px;
+            padding: 22px;
+            border: 2px solid transparent;
+            border-radius: 17px;
+            background: var(--tint);
+            text-align: left;
+            cursor: pointer;
+            color: #17233f;
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .subject-card:hover,
+        .subject-card:focus-visible {
+            transform: translateY(-6px) scale(1.025);
+            box-shadow: 0 15px 30px rgba(26, 47, 86, 0.15);
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .subject-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+        }
+
+        .subject-icon {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            border-radius: 13px;
+            background: white;
+            font-size: 25px;
+        }
+
+        .subject-card h3 {
+            margin: 0 0 9px;
+            font-size: 19px;
+        }
+
+        .subject-reference {
+            display: block;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            color: #58647a;
+            font-size: 13px;
+            line-height: 1.6;
+            transition: max-height 0.25s ease, opacity 0.25s ease;
+        }
+
+        .subject-card:hover .subject-reference,
+        .subject-card:focus-visible .subject-reference,
+        .subject-card.selected .subject-reference {
+            max-height: 90px;
+            opacity: 1;
+        }
+
+        .subject-card .choose-label {
+            display: block;
+            margin-top: 12px;
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .mathematics {
+            --accent: #3159c9;
+            --tint: #edf1ff;
+        }
+
+        .english {
+            --accent: #16825d;
+            --tint: #e6f7ef;
+        }
+
+        .biology {
+            --accent: #bd741a;
+            --tint: #fff2df;
+        }
+
+        .physics {
+            --accent: #8047bd;
+            --tint: #f3eaff;
+        }
+
+        .exam-actions {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        #start-exam-button {
+            width: 100%;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 12px;
+            background: #2456c4;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        #start-exam-button:hover {
+            background: #173f9b;
+            transform: translateY(-2px);
+        }
+
+        #start-exam-button:disabled {
+            background: #aab5cb;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #exam-message {
+            color: #b42318;
+            line-height: 1.5;
+        }
+
+        .dashboard-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #2456c4;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .dashboard-link:hover {
+            text-decoration: underline;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 520px) {
+            .exam-header {
+                padding: 30px 16px 40px;
+            }
+
+            .subject-panel {
+                padding: 20px 15px;
+            }
+
+            .subject-grid {
+                gap: 12px;
+            }
+
+            .subject-card {
+                min-height: 170px;
+                padding: 15px 12px;
+            }
+
+            .subject-card h3 {
+                font-size: 16px;
+            }
+
+            .subject-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 21px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .subject-card,
+            .subject-reference,
+            #start-exam-button {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="exam-page">
+
+    <header class="exam-header">
+        <h1>CBE Examination Portal</h1>
+        <p>Your examination journey starts here.</p>
+    </header>
+
+    <main class="exam-container">
+        <section class="subject-panel">
+
+            <h2>Select Your Subject</h2>
+            <p class="panel-description">
+                Choose one of the subjects below to prepare for your examination.
+            </p>
+
+            <!-- Keep this select for compatibility with exam.js -->
+            <label for="subject-select" class="visually-hidden">
+                Selected subject
+            </label>
+
+            <select id="subject-select" class="visually-hidden" required>
+                <option value="">Choose a subject</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="English Language">English Language</option>
+                <option value="Biology">Biology</option>
+                <option value="Physics">Physics</option>
+            </select>
+
+            <div class="subject-grid">
+
+                <button type="button"
+                        class="subject-card mathematics"
+                        data-subject="Mathematics"
+                        aria-pressed="false">
+                    <span class="subject-icon" aria-hidden="true">📐</span>
+                    <h3>Mathematics</h3>
+                    <span class="subject-reference">
+                        Numbers, calculations and problem-solving.
+                        <br>Question bank: Mathematics
+                    </span>
+                    <span class="choose-label">Select subject →</span>
+                </button>
+
+                <button type="button"
+                        class="subject-card english"
+                        data-subject="English Language"
+                        aria-pressed="false">
+                    <span class="subject-icon" aria-hidden="true">📚</span>
+                    <h3>English Language</h3>
+                    <span class="subject-reference">
+                        Grammar, comprehension and vocabulary.
+                        <br>Question bank: English Language
+                    </span>
+                    <span class="choose-label">Select subject →</span>
+                </button>
+
+                <button type="button"
+                        class="subject-card biology"
+                        data-subject="Biology"
+                        aria-pressed="false">
+                    <span class="subject-icon" aria-hidden="true">🌿</span>
+                    <h3>Biology</h3>
+                    <span class="subject-reference">
+                        Living things, cells and the environment.
+                        <br>Question bank: Biology
+                    </span>
+                    <span class="choose-label">Select subject →</span>
+                </button>
+
+                <button type="button"
+                        class="subject-card physics"
+                        data-subject="Physics"
+                        aria-pressed="false">
+                    <span class="subject-icon" aria-hidden="true">⚛️</span>
+                    <h3>Physics</h3>
+                    <span class="subject-reference">
+                        Forces, energy and the physical world.
+                        <br>Question bank: Physics
+                    </span>
+                    <span class="choose-label">Select subject →</span>
+                </button>
+
+            </div>
+
+            <div class="exam-actions">
+                <p id="exam-message" role="status" aria-live="polite">
+                    Select a subject to continue.
+                </p>
+
+                <button id="start-exam-button" type="button" disabled>
+                    Start Examination →
+                </button>
+
+                <a class="dashboard-link" href="dashboard.html">
+                    ← Return to Dashboard
+                </a>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Select a card while preserving the existing exam.js controls -->
+    <script>
+        const subjectCards = document.querySelectorAll(".subject-card");
+        const subjectSelect = document.getElementById("subject-select");
+        const startButton = document.getElementById("start-exam-button");
+        const examMessage = document.getElementById("exam-message");
+
+        subjectCards.forEach(function(card) {
+            card.addEventListener("click", function() {
+                const chosenSubject = card.dataset.subject;
+
+                subjectSelect.value = chosenSubject;
+
+                subjectCards.forEach(function(otherCard) {
+                    otherCard.classList.remove("selected");
+                    otherCard.setAttribute("aria-pressed", "false");
+                });
+
+                card.classList.add("selected");
+                card.setAttribute("aria-pressed", "true");
+
+                startButton.disabled = false;
+                examMessage.textContent =
+                    chosenSubject + " selected. You can now start your examination.";
+                examMessage.style.color = "#16825d";
+            });
+        });
+    </script>
+
+    <script type="module" src="exam.js"></script>
+
+</body>
+</html>

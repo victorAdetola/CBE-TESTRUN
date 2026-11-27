@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration | CBE Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CBE Examination Portal</h1>
+        <p>Create your student account</p>
+    </header>
+
+    <main class="welcome">
+        <h2>Student Registration</h2>
+        <p>Fill in your details to create an account.</p>
+
+        <form id="registration-form">
+
+            <label for="firstName">First Name</label>
+            <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                autocomplete="given-name"
+                required
+            >
+
+            <label for="lastName">Last Name</label>
+            <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                autocomplete="family-name"
+                required
+            >
+
+            <label for="dateOfBirth">Date of Birth</label>
+            <input
+                type="date"
+                id="dateOfBirth"
+                name="dateOfBirth"
+                required
+            >
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                required
+            >
+
+            <label for="phone">Phone Number</label>
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                autocomplete="tel"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+            >
+
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                autocomplete="new-password"
+                minlength="6"
+                required
+            >
+
+            <button type="submit" id="register-button">
+                Create Account
+            </button>
+
+            <p id="form-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <p>Already have an account?
+            <a href="login.html">Log in here</a>
+        </p>
+
+        <p><a href="index.html">Back to Home</a></p>
+    </main>
+
+    <script type="module" src="register.js"></script>
+
+</body>
+</html>
