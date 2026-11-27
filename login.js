@@ -1,6 +1,9 @@
 
 import { auth } from "./app.js";
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import {
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 
 const loginForm = document.getElementById("login-form");
 const loginButton = document.getElementById("login-button");
@@ -48,5 +51,53 @@ window.location.href = "dashboard.html";
     } finally {
         loginButton.disabled = false;
         loginButton.textContent = "Log In";
+    }
+});
+// FORGOT PASSWORD FUNCTIONALITY
+
+const forgotPassword = document.getElementById("forgot-password");
+
+forgotPassword.addEventListener("click", async function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+
+    if (!email) {
+        loginMessage.textContent =
+            "Please enter your registered email address first.";
+        loginMessage.style.color = "red";
+        return;
+    }
+
+    forgotPassword.textContent = "Sending reset email...";
+
+    try {
+        await sendPasswordResetEmail(auth, email);
+
+        loginMessage.textContent =
+            "If an account exists with this email, a password reset link will be sent. Check your inbox.";
+        loginMessage.style.color = "green";
+
+    } catch (error) {
+        console.error("Password recovery error:", error);
+
+        if (error.code === "auth/invalid-email") {
+            loginMessage.textContent =
+                "Please enter a valid email address.";
+        } else if (error.code === "auth/too-many-requests") {
+            loginMessage.textContent =
+                "Too many requests. Please try again later.";
+        } else if (error.code === "auth/network-request-failed") {
+            loginMessage.textContent =
+                "Network error. Check your internet connection.";
+        } else {
+            loginMessage.textContent =
+                "Unable to process your request. Please try again.";
+        }
+
+        loginMessage.style.color = "red";
+
+    } finally {
+        forgotPassword.textContent = "Forgot Password?";
     }
 });
